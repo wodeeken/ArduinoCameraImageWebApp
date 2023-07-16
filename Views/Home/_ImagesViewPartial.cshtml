@@ -1,0 +1,1696 @@
+@model List<DayImages>
+<style>
+    .image-slider {
+  position: relative;
+  width: 600px;
+  height: 300px;
+  margin: 50px 0 30px 20px;
+}
+
+.image-slider .content {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.image-slider  .content ul li {
+  position: relative;
+  width: 600px;
+  height: 300px;
+}
+
+.image-slider  .content ul li a {
+  display: block;
+  width: 600px;
+  height: 300px;
+}
+
+.image-slider  .content ul li .text {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 350px;
+  height: 30px;
+  font-size: 13px;
+  line-height: 30px;
+  font-family: Verdana;
+  text-indent: 6px;
+  color: #fff;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;/**width:100%;*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7F08355C', endColorstr='#7F08355C');*/
+}
+
+.image-slider  .tag {
+  position: absolute;
+  left: 0;
+  bottom: -100;
+  width: 100%;
+  font-size: 0;
+  letter-spacing: -8px;
+  text-align: right;
+filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#7F08355C', endColorstr='#7F08355C');/**filter:none;*/
+}
+
+:root .image-slider  .tag {
+  filter: none;
+  background-color: rgba(8,53,92,0.5);
+}
+
+.image-slider  .tag ul {
+*zoom:1;
+  padding: 4px 10px;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+}
+
+.image-slider  .tag li {
+  display: inline-block;
+*zoom:1;
+*display:inline;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ccc;
+  margin-left: 3px;
+  font-size: 12px;
+  line-height: 18px;
+  font-family: Verdana;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.image-slider  .tag li.current {
+  border-color: #1188C0;
+  color: #fff;
+  background-color: #1072AA;
+}
+
+.image-slider  .pos { display: none; }
+
+.image-slider  .btn a {
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 50px;
+  margin-top: -30px;
+  background: #000 url(images/slide_arrow7.png) no-repeat -187px center;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  -webkit-transition: all .3s linear;
+  transition: all .3s linear;
+  cursor: pointer;
+  outline: none;
+}
+
+.image-slider  .btn a:hover {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.image-slider  .btn .btnPrev { left: 0; }
+
+.image-slider  .btn .btnNext {
+  right: 0;
+  background-position: -68px center;
+}
+
+</style>    
+  
+<script>
+        $(document).ready(function(){
+            1
+	        $(".image-slider ").slide();
+        })
+   
+        function buttonClick(target){
+        console.log("CLICKED IT! My Target" + '#' + target)
+
+        $('#' + target).modal("show");
+        
+        } 
+        function closeModal(target){
+            console.log("Closing modal.")
+            $('#' + target).modal("hide");
+        }
+        @* $("#myModal").modal("show"); *@
+  
+
+    
+    
+   
+</script>
+
+<table class="table">
+    <th>Day</th>
+@{
+    foreach(DayImages item in this.Model){
+        <tr id="@item.date.ToString("yyyyMMdd")">
+            <td>@item.date.ToString()</td>
+            <td>
+            @if(item.Hour0_Images != null && item.Hour0_Images.Count() > 0){
+                 <button type="button" class="btn btn-primary 12AM"  onclick="buttonClick('@item.date.ToString("yyyyMMdd")_12AM')" >
+                12AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_12AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 12 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour0_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour0_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour0_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour0_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_12AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+            }else{
+                <p>12AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour1_Images != null && item.Hour1_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 1AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_1AM')" >
+                1AM
+                </button> 
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_1AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 1 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour1_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour1_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour1_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour1_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_1AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            }else{
+                <p>1AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour2_Images != null && item.Hour2_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 2AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_2AM')">
+                2AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_2AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 2 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour2_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour2_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour2_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour2_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_2AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>  
+            }else{
+                <p>2AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour3_Images != null && item.Hour3_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 3AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_3AM')">
+                3AM
+                </button> 
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_3AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 3 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour3_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour3_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour3_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour3_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_3AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            }else{
+                <p>3AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour4_Images != null && item.Hour4_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 4AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_4AM')">
+                4AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_4AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 4 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour4_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour4_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour4_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour4_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_4AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            }else{
+                <p>4AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour5_Images != null && item.Hour5_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 5AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_5AM')">
+                5AM
+                </button>  
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_5AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 5 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour5_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour5_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour5_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour5_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_5AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            }else{
+                <p>5AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour6_Images != null && item.Hour6_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 6AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_6AM')">
+                6AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_6AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 6 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour6_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour6_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour6_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour6_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_6AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>    
+            }else{
+                <p>6AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour7_Images != null && item.Hour7_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 7AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_7AM')">
+                7AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_7AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 7 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour7_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour7_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour7_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour7_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_7AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>    
+            }else{
+                <p>7AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour8_Images != null && item.Hour8_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 8AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_8AM')">
+                8AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_8AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 8 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour8_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour8_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour8_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour8_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_8AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>8AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour9_Images != null && item.Hour9_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 9AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_9AM')">
+                9AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_9AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 9 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour9_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour9_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour9_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour9_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_9AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>       
+            }else{
+                <p>9AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour10_Images != null && item.Hour10_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 10AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_10AM')">
+                10AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_10AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 10 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour10_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour10_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour10_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour10_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_10AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>     
+            }else{
+                <p>10AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour11_Images != null && item.Hour11_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 11AM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_11AM')">
+                11AM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_11AM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 11 AM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour11_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour11_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour11_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour11_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_11AM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>    
+            }else{
+                <p>11AM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour12_Images != null && item.Hour12_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 12PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_12PM')">
+                12PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_12PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 12 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour12_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour12_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour12_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour12_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_12PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>   
+            }else{
+                <p>12PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour13_Images != null && item.Hour13_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 1PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_1PM')">
+                1PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_1PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 1 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour13_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour13_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour13_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour13_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_1PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>         
+            }else{
+                <p>1PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour14_Images != null && item.Hour14_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 2PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_2PM')">
+                2PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_2PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 2 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour14_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour14_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour14_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour14_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_2PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>2PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour15_Images != null && item.Hour15_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 3PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_3PM')">
+                3PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_3PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 3 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour15_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour15_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour15_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour15_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_3PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>3PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour16_Images != null && item.Hour16_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 4PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_4PM')">
+                4PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_4PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 4 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour16_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour16_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour16_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour16_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_4PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>     
+            }else{
+                <p>4PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour17_Images != null && item.Hour17_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 5PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_5PM')">
+                5PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_5PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 5 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour17_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour17_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour17_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour17_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_5PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            }else{
+                <p>5PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour18_Images != null && item.Hour18_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 6PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_6PM')">
+                6PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_6PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 6 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour18_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour18_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour18_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour18_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_6PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>     
+            }else{
+                <p>6PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour19_Images != null && item.Hour19_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 7PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_7PM')">
+                7PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_7PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 7 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour19_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour19_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour19_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour19_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_7PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>7PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour20_Images != null && item.Hour20_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 8PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_8PM')">
+                8PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_8PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 8 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour20_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour20_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour20_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour20_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_8PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>8PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour21_Images != null && item.Hour21_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 9PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_9PM')">
+                9PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_9PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 9 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour21_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour21_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour21_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour21_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_9PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>    
+            }else{
+                <p>9PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour22_Images != null && item.Hour22_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 10PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_10PM')">
+                10PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_10PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 10 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour22_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour22_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour22_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour22_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_10PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>       
+            }else{
+                <p>10PM</p>
+            }
+            </td>
+            <td>
+            @if(item.Hour23_Images != null && item.Hour23_Images.Count() > 0){
+                <button type="button" class="btn btn-primary 11PM" onclick="buttonClick('@item.date.ToString("yyyyMMdd")_11PM')">
+                11PM
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@item.date.ToString("yyyyMMdd")_11PM" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        
+                        <h4 class="modal-title">@item.date.Date.ToString("MMM dd, yyyy") 11 PM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="demo" class="image-slider">
+                                <div class="content">
+                                    <ul class="j_slideLists">
+                                        @foreach(var imagePath in item.Hour23_Images){
+                                            <li> 
+                                                <a href="#">
+                                                    <img src="@imagePath.Item2">
+                                                </a> 
+                                                <span class="text">@imagePath.Item1</span> 
+                                            </li>
+                                        }
+                                    
+                                   
+                                    </ul>
+                                </div>
+                                
+                                <div class="tag">
+                                    <ul class="j_slideTags">
+                                        
+                                        @{
+                                            var first = true;
+                                            for(int i = 0; i < item.Hour23_Images.Count; i++){
+                                                if(first){
+                                                    first = false;
+                                                    <li class="current">@item.Hour23_Images.ElementAt(i).Item1</li>
+                                                }else{
+                                                    <li>@item.Hour23_Images.ElementAt(i).Item1</li>
+                                                }
+                                            }
+                                        }
+                                        
+                                    </ul>
+                                </div>
+                                <div class="btn"> 
+                                    <a href="javascript:void(0);" target="_self" class="btnPrev j_slidePrev"></a> 
+                                    <a href="javascript:void(0);" target="_self" class="btnNext j_slideNext"></a> 
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="closeModal('@item.date.ToString("yyyyMMdd")_11PM')">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>      
+            }else{
+                <p>11PM</p>
+            }
+            </td>
+            
+        </tr>
+    }
+}
+</table>
+

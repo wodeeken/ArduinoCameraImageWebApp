@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+  <script>
+  $( function() {
+    $( "#datepicker_start" ).datepicker();
+    $( "#datepicker_end" ).datepicker();
+    // Submit new Start Date / End Date.
+    
+  } );
+
+  function submitFormAjax(){
+           var targeturl = '@Url.Action("GetPhotos", "Home")?startDate=' + $("#datepicker_start").val() + "&endDate=" + $("#datepicker_end").val() + "" ;
+            
+            $.ajax({
+            type: 'GET',
+            url: targeturl, 
+            success: function (result) {
+                //alert('Successfully received Data ');
+                $("#target").html(result);
+               // console.log(result);
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+               // console.log('Failed ');
+            }
+        })
+
+    }
+  </script>
+
+<div class="text-center">
+    <h1 class="display-4">Surveillance Camera Image Browser</h1>
+</div>
+<div class="row">
+   <div class="col">
+        <p>Start Date: <input type="text" id="datepicker_start"></p>
+   </div>
+    <div class='col'>
+        <p>End Date: <input type="text" id="datepicker_end"></p>
+    </div>
+</div>
+<div class="row">
+    <div class='col'>
+        <button type="button"  class="btn btn-primary" onclick="submitFormAjax()">Submit</button>
+    </div>
+</div>
+<div class="row">
+    <div id="target">
+ 
+    </div>
+</div>
